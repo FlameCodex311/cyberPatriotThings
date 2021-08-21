@@ -1,4 +1,4 @@
-# cyberPatriotStuff
+# cyberPatriotThings (A fork of cyberPatriotStuff)
 for the Harlem High School **Cyber Patriot** team.
 
 ## This repository was created for the purpose of creating tools to help us in competitions, things like
