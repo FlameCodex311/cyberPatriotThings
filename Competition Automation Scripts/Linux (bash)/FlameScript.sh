@@ -1,17 +1,6 @@
 #!/bin.sh
 clear
 
-green='\e[32m'
-blue='\e[34m'
-clear='\e[0m'
-
-ColorGreen(){
-	echo $green$1$clear
-}
-ColorBlue(){
-	echo $blue$1$clear
-}
-
 view_passwd() {
   clear
   cat /etc/passwd
@@ -157,6 +146,9 @@ bumrun() {
 
 runneo() {
   clear
+	apt-get update && apt-get install neofetch
+	clear
+	neofetch
 }
 
 menu(){
@@ -167,21 +159,27 @@ echo "
 ██╔══╝  ██║     ██╔══██║██║╚██╔╝██║██╔══╝  ╚════██║██║     ██╔══██╗██║██╔═══╝    ██║
 ██║     ███████╗██║  ██║██║ ╚═╝ ██║███████╗███████║╚██████╗██║  ██║██║██║        ██║
 ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝
-$(ColorGreen '1)') View passwd file
-$(ColorGreen '2)') View group file
-$(ColorGreen '3)') View a users groups
-$(ColorGreen '4)') View strings in a given database (getent)
-$(ColorGreen '5)') View information about a given file
-$(ColorGreen '6)') Add or remove a user (requires root)
-$(ColorGreen '7)') Add or remove a group (requires root)
-$(ColorGreen '8)') Add or remove a user from a group (requires root)
-$(ColorGreen '9)') Change a users password (requires root)
-$(ColorGreen '10)') Update repositories and upgrade packages (requires root)
-$(ColorGreen '11)') Update security settings (requires root)
-$(ColorGreen '12)') Run bum (requires root)
-$(ColorGreen '13)') Display system information (requires root)
-$(ColorGreen '0)') Exit
-$(ColorBlue 'Choose an option:') "
+
+///////////////////////////////////  Version 0.1.3  ///////////////////////////////////
+
+1) View passwd file
+2) View group file
+3) View a users groups
+4) View strings in a given database (getent)
+5) View information about a given file
+6) Add or remove a user (requires root)
+7) Add or remove a group (requires root)
+8) Add or remove a user from a group (requires root)
+9) Change a users password (requires root)
+10) Update repositories and upgrade packages (requires root)
+11) Update security settings (requires root)
+12) Run bum (requires root)
+13) Display system information (requires root)
+0) Exit
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+Choose an option: "
         read a
         case $a in
 	        1) view_passwd ; read read -p"Press any key to continue";echo ; clear ; menu ;;
