@@ -155,6 +155,10 @@ bumrun() {
   sudo bum
 }
 
+runneo() {
+  clear
+}
+
 menu(){
 echo "
 ███████╗██╗      █████╗ ███╗   ███╗███████╗███████╗ ██████╗██████╗ ██╗██████╗ ████████╗
@@ -175,6 +179,7 @@ $(ColorGreen '9)') Change a users password (requires root)
 $(ColorGreen '10)') Update repositories and upgrade packages (requires root)
 $(ColorGreen '11)') Update security settings (requires root)
 $(ColorGreen '12)') Run bum (requires root)
+$(ColorGreen '13)') Display system information (requires root)
 $(ColorGreen '0)') Exit
 $(ColorBlue 'Choose an option:') "
         read a
@@ -190,7 +195,8 @@ $(ColorBlue 'Choose an option:') "
           9) changepasswd ; read read -p"Press any key to continue";echo ; clear ; menu ;;
           10) upgrade ; read read -p"Press any key to continue";echo ; clear ; menu ;;
           11) security ; read read -p"Press any key to continue";echo ; clear ; menu ;;
-          13) bumrun ; read read -p"Press any key to continue";echo ; clear ; menu ;;
+          12) bumrun ; read read -p"Press any key to continue";echo ; clear ; menu ;;
+          13) runneo ; read read -p"Press any key to continue";echo ; clear ; menu ;;
 
 			0) clear ; exit 0 ;;
 			*) echo -e $red"Wrong option."$clear; WrongCommand;;
