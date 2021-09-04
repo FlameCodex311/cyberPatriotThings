@@ -1,77 +1,141 @@
-#!/bin.sh
+#!/bin/bash
 clear
 
 view_passwd() {
   clear
+  echo -------------------------------passwd-------------------------------
   cat /etc/passwd
+  echo --------------------------------------------------------------------
+  echo ""
+  echo Press any key to return...
 }
 
 view_group() {
   clear
+  echo --------------group--------------
   cat /etc/group
+  echo ----------------------------------
+  echo ""
+  echo Press any key to return...
 }
 
 view_usr() {
   clear
   echo "Which user would you like to inspect?"
+  echo ""
   read uservar
-  groups $uservar
+  groups $uservar > /dev/null
+  if [ "$?" = "1" ]; then
+    clear
+    echo ---------------
+    echo Invalid User!!!
+    echo ---------------
+    echo ""
+    echo Press any key to return...
+  else
+    clear
+    echo the user $uservar is in the groups:
+    echo -----------------------------------
+    groups $uservar
+    echo -----------------------------------
+    echo ""
+    echo Press any key to return...
+  fi
 }
 
 view_strings() {
   clear
   echo "Which database would you like to explore? (passwd, group, shadow)"
+  echo ""
   read database
-  echo ""
-  echo "Which key would you like to use?"
-  read key
-  echo ""
-  getent $database $key
+  case "$database" in
+    passwd | group | shadow)
+      clear
+      echo ""
+      echo "Which key would you like to use for the database" $database "(use none if you dont know)"?
+      echo ""
+      read key
+      clear
+      getent $database $key
+      echo ""
+      echo Press any key to return...
+      ;;
+    *)
+      clear
+      echo ---------------
+      echo Invalid Database!!!
+      echo ---------------
+      echo ""
+      echo Press any key to return...
+      ;;
+  esac
 }
 
 file_properties() {
   clear
-  echo "Enter the path to the file you want to explore"
-  read filepath
+  echo "Enter the path to the file you want to explore:"
   echo ""
-  ls -l $filepath
+  read filepath
+  ls -l $filepath &> /dev/null
+  if [ $? = 2 ]; then
+    clear
+    echo ---------------
+    echo Invalid filepath!!!
+    echo ---------------
+    echo Press any key to return...
+  else
+    echo ""
+    ls -l $filepath
+    echo ""
+    echo Press any key to return...
+  fi
 }
 
 addusers() {
   clear
   echo "Would you like to add or remove a user? (add/remove)"
+  echo ""
   read options1
   echo ""
   if [ "$options1" = "add" ]; then
-    echo "Enter the name of the user you want to add"
+    echo Enter the name of the user you want to add
+    echo ""
     read userEntered
     echo ""
     adduser $userEntered
-    echo "Completed Successfully!"
+    echo Completed Successfully!
   elif [ "$options1" = "remove" ]; then
-    echo "Enter the name of the user you want to remove"
+    echo Enter the name of the user you want to remove
+    echo ""
     read userRemove
     echo ""
     deluser $userRemove
-    echo "Completed Successfully!"
+    echo Completed Successfully!
+    echo ""
+    echo Press any key to return...
   else
-    echo "Invalid input"
+    echo Invalid input
+    echo ""
+    echo Press any key to return...
   fi
 }
 
 addrmgroup() {
   clear
   echo "Do you want to add or delete a group? (add/remove)"
+  echo ""
   read options3
   echo ""
   if [ "$options3" = "add" ]; then
     echo "Enter the name of the group you want to create"
+    echo ""
     read options4
     echo ""
     groupadd $options4
     echo "Completed Successfully!"
   elif [ "$options3" = "remove" ]; then
     echo "Enter The name of the group you want to remove"
+    echo ""
     read options5
     echo ""
     groupdel $options5
@@ -84,22 +148,27 @@ addrmgroup() {
 addrmusergroup() {
   clear
   echo "Do you want to add or delete a user from a group? (add/remove)"
+  echo ""
   read options6
   echo ""
   if [ "$options6" = "add" ]; then
     echo "Enter the name of the user you want to add to a group"
+    echo ""
     read options7
     echo ""
     echo "Enter the group you want to add them to"
+    echo ""
     read options8
     echo ""
     gpasswd -a $options7 $options8
     echo "Completed Successfully!"
   elif [ "$options6" = "remove" ]; then
     echo "Enter the name of the user you want to remove from a group"
+    echo ""
     read options9
     echo ""
     echo "Enter the name of the group you want to remove them from"
+    echo ""
     read options10
     echo ""
     gpasswd -d $options9 $options10
@@ -112,6 +181,7 @@ addrmusergroup() {
 changepasswd () {
   clear
   echo "Enter the name of the user whos password you want to change"
+  echo ""
   read userpasswd
   echo ""
   passwd $userpasswd
@@ -160,8 +230,10 @@ echo "
 ██║     ███████╗██║  ██║██║ ╚═╝ ██║███████╗███████║╚██████╗██║  ██║██║██║        ██║
 ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝
 
-///////////////////////////////////  Version 0.1.3  ///////////////////////////////////
-
+///////////////////////////////////  Version 0.1.3  ///////////////////////////////////"
+echo ""
+echo "The current working directory is:" $PWD
+echo "
 1) View passwd file
 2) View group file
 3) View a users groups
@@ -181,6 +253,7 @@ echo "
 
 Choose an option: "
         read a
+        echo ""
         case $a in
 	        1) view_passwd ; read read -p"Press any key to continue";echo ; clear ; menu ;;
 	        2) view_group ; read read -p"Press any key to continue";echo ; clear ; menu ;;
@@ -197,7 +270,7 @@ Choose an option: "
           13) runneo ; read read -p"Press any key to continue";echo ; clear ; menu ;;
 
 			0) clear ; exit 0 ;;
-			*) echo -e $red"Wrong option."$clear; WrongCommand;;
+			*) echo Invalid option, please try again ; read read -p"Press any key to continue";echo ; clear ; menu ;;
         esac
 }
 
