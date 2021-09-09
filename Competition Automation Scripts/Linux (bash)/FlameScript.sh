@@ -221,9 +221,9 @@ security() {
   echo "Completed Successfully!"
 }
 
-bumrun() {
+tweaksrun() {
   clear
-  sudo bum
+  sudo gnome-tweaks &> /dev/null & return &> /dev/null
 }
 
 findmedia() {
@@ -272,15 +272,15 @@ echo -e "\e[0;37m
 3) View a users groups
 4) View strings in a given database (getent)
 5) View information about a given file
-6) Add or remove a user (requires root)
-7) Add or remove a group (requires root)
-8) Add or remove a user from a group (requires root)
-9) Change a users password (requires root)
-10) Update repositories and upgrade packages, also scan for viruses (requires root)
-11) Update security settings (requires root)
-12) Run bum (requires root)
-13) Display system information (requires root)
-14) Scan for media files (requires root)
+6) Add or remove a user
+7) Add or remove a group
+8) Add or remove a user from a group
+9) Change a users password
+10) Update repositories and upgrade packages, also scan for viruses
+11) Update security settings
+12) Run gnome-tweaks
+13) Display system information
+14) Scan for media files
 0) Exit
 
 \e[0;34m////////////////////////////////////////////////////////////////////////////////////////\e[0m
@@ -300,7 +300,7 @@ echo -e "\e[0;37m
           9) changepasswd ; read read -p"Press any key to continue";echo ; clear ; menu ;;
           10) upgrade ; read read -p"Press any key to continue";echo ; clear ; menu ;;
           11) security ; read read -p"Press any key to continue";echo ; clear ; menu ;;
-          12) bumrun ; read read -p"Press any key to continue";echo ; clear ; menu ;;
+          12) tweaksrun ; read read -p"Press any key to continue";echo ; clear ; menu ;;
           13) runneo ; read read -p"Press any key to continue";echo ; clear ; menu ;;
           14) findmedia ; read read -p"Press any key to continue";echo ; clear ; menu ;;
 
