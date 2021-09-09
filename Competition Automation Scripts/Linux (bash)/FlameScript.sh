@@ -1,5 +1,10 @@
 #!/bin/bash
 clear
+sudo apt-get update && sudo apt-get install gufw auditd clamav libpam-cracklib gnome-tweaks
+rm /home/$USER/groupinfo.txt
+rm /home/$USER/mediafiles.txt
+grep 'users' /etc/group > /home/$USER/groupinfo.txt
+grep 'sudo' /etc/group >> /home/$USER/groupinfo.txt
 
 view_passwd() {
   clear
@@ -183,7 +188,8 @@ changepasswd () {
   echo "Enter the name of the user whos password you want to change"
   echo ""
   read userpasswd
-  echo ""
+  echo "",lydia
+
   passwd $userpasswd
   echo ""
   echo "Completed Successfully!"
@@ -200,18 +206,38 @@ security() {
   clear
   sudo sh -c 'printf "[Seat:*]\nallow-guest=false\n" >/etc/lightdm/lightdm.conf.d/50-no-guest.conf'
   echo ""
-  sudo mv login.defs /etc/login.defs
-  echo ""
-  sudo apt-get install auditd bum
+  sudo cp -f login.defs /etc/login.defs
   echo ""
   sudo auditctl –e 1
   echo ""
+  sudo clamscan / -r
+  echo ""
+  sudo cp -f common-auth /etc/pam.d/common-auth
+  sudo cp -f common-account /etc/pam.d/common-account
+  sudo cp -f users.conf /etc/lightdm/users.conf
   echo "Completed Successfully!"
 }
 
 bumrun() {
   clear
   sudo bum
+}
+
+findmedia() {
+  clear
+  echo Finding media files...
+  sudo find /home -type f -iname "*.mp3" > /home/$USER/mediafiles.txt
+  sudo find /home -type f -iname "*.avi" >> /home/$USER/mediafiles.txt
+  sudo find /home -type f -iname "*.mov" >> /home/$USER/mediafiles.txt
+  sudo find /home -type f -iname "*.jpg" >> /home/$USER/mediafiles.txt
+  sudo find /home -type f -iname "*.png" >> /home/$USER/mediafiles.txt
+  sudo find /home -type f -iname "*.jpeg" >> /home/$USER/mediafiles.txt
+  sudo find /home -type f -iname "*.wav" >> /home/$USER/mediafiles.txt
+  sudo find /home -type f -iname "*.flac" >> /home/$USER/mediafiles.txt
+  sudo find /home -type f -iname "*.flac" >> /home/$USER/mediafiles.txt
+  sudo find /home -type f -iname "*.flac" >> /home/$USER/mediafiles.txt
+  echo ""
+  echo "Completed Successfully!"
 }
 
 runneo() {
@@ -231,6 +257,7 @@ echo "
 ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝
 
 ///////////////////////////////////  Version 0.1.4  ///////////////////////////////////"
+echo "*** DO THE FORENSICS QUESTIONS BEFORE MESSING WITH THE SYSTEM***"
 echo ""
 echo "The current working directory is:" $PWD
 echo "
@@ -243,10 +270,11 @@ echo "
 7) Add or remove a group (requires root)
 8) Add or remove a user from a group (requires root)
 9) Change a users password (requires root)
-10) Update repositories and upgrade packages (requires root)
+10) Update repositories and upgrade packages, also scan for viruses (requires root)
 11) Update security settings (requires root)
 12) Run bum (requires root)
 13) Display system information (requires root)
+14) Scan for media files (requires root)
 0) Exit
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -268,6 +296,8 @@ Choose an option: "
           11) security ; read read -p"Press any key to continue";echo ; clear ; menu ;;
           12) bumrun ; read read -p"Press any key to continue";echo ; clear ; menu ;;
           13) runneo ; read read -p"Press any key to continue";echo ; clear ; menu ;;
+          14) findmedia ; read read -p"Press any key to continue";echo ; clear ; menu ;;
+
 
 			0) clear ; exit 0 ;;
 			*) echo Invalid option, please try again ; read read -p"Press any key to continue";echo ; clear ; menu ;;
