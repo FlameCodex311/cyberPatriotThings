@@ -1,10 +1,13 @@
 #!/bin/bash
 clear
-sudo apt-get update && sudo apt-get install gufw auditd clamav libpam-cracklib gnome-tweaks
-rm /home/$USER/groupinfo.txt
-rm /home/$USER/mediafiles.txt
+echo Installing applications...
+clear
+sudo apt-get update &> /dev/null && sudo apt-get install gufw auditd clamav libpam-cracklib gnome-tweaks &> /dev/null
+rm /home/$USER/groupinfo.txt &> /dev/null
+rm /home/$USER/mediafiles.txt &> /dev/null
 grep 'users' /etc/group > /home/$USER/groupinfo.txt
 grep 'sudo' /etc/group >> /home/$USER/groupinfo.txt
+software-properties-gtk & return &> /dev/null
 
 view_passwd() {
   clear
@@ -256,7 +259,7 @@ echo "
 ██║     ███████╗██║  ██║██║ ╚═╝ ██║███████╗███████║╚██████╗██║  ██║██║██║        ██║
 ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝
 
-///////////////////////////////////  Version 0.1.4  ///////////////////////////////////"
+///////////////////////////////////  Version 0.1.5  ///////////////////////////////////"
 echo "*** DO THE FORENSICS QUESTIONS BEFORE MESSING WITH THE SYSTEM***"
 echo ""
 echo "The current working directory is:" $PWD
