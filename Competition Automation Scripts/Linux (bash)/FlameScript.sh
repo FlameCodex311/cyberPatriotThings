@@ -7,7 +7,7 @@ rm /home/$USER/groupinfo.txt &> /dev/null
 rm /home/$USER/mediafiles.txt &> /dev/null
 grep 'users' /etc/group > /home/$USER/groupinfo.txt
 grep 'sudo' /etc/group >> /home/$USER/groupinfo.txt
-software-properties-gtk & return &> /dev/null
+software-properties-gtk &> /dev/null & return &> /dev/null
 
 view_passwd() {
   clear
@@ -251,7 +251,7 @@ runneo() {
 }
 
 menu(){
-echo "
+echo -e "\e[0;34m
 ███████╗██╗      █████╗ ███╗   ███╗███████╗███████╗ ██████╗██████╗ ██╗██████╗ ████████╗
 ██╔════╝██║     ██╔══██╗████╗ ████║██╔════╝██╔════╝██╔════╝██╔══██╗██║██╔══██╗╚══██╔══╝
 █████╗  ██║     ███████║██╔████╔██║█████╗  ███████╗██║     ██████╔╝██║██████╔╝   ██║
@@ -259,11 +259,14 @@ echo "
 ██║     ███████╗██║  ██║██║ ╚═╝ ██║███████╗███████║╚██████╗██║  ██║██║██║        ██║
 ╚═╝     ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝
 
-///////////////////////////////////  Version 0.1.5  ///////////////////////////////////"
-echo "*** DO THE FORENSICS QUESTIONS BEFORE MESSING WITH THE SYSTEM***"
+///////////////////////////////////  Version 0.1.5  ///////////////////////////////////\e[0m"
 echo ""
-echo "The current working directory is:" $PWD
-echo "
+echo -e "\e[0;31m*****************************************************************\e[0m"
+echo -e "\e[0;31m*** DO THE FORENSICS QUESTIONS BEFORE MESSING WITH THE SYSTEM ***\e[0m"
+echo -e "\e[0;31m*****************************************************************\e[0m"
+echo ""
+echo -e "\e[0;33mThe current working directory is: $PWD\e[0m"
+echo -e "\e[0;37m
 1) View passwd file
 2) View group file
 3) View a users groups
@@ -280,9 +283,9 @@ echo "
 14) Scan for media files (requires root)
 0) Exit
 
-////////////////////////////////////////////////////////////////////////////////////////
+\e[0;34m////////////////////////////////////////////////////////////////////////////////////////\e[0m
 
-Choose an option: "
+\e[0;36mChoose an option: \e[0m"
         read a
         echo ""
         case $a in
