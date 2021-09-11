@@ -1,4 +1,5 @@
 #!/bin/bash
+cd /home/$USER
 clear
 RED="\e[1;31m"
 GREEN="\e[1;32m"
@@ -9,14 +10,25 @@ CYAN="\e[1;36m"
 WHITE="\e[1;37m"
 ENDLN="\e[0m"
 
-echo -e "$WHITE Installing applications... $ENDLN"
-clear
-sudo apt-get update &> /dev/null && sudo apt-get install gufw auditd clamav libpam-cracklib gnome-tweaks &> /dev/null
-rm /home/$USER/groupinfo.txt &> /dev/null
-rm /home/$USER/mediafiles.txt &> /dev/null
-grep 'users' /etc/group > /home/$USER/groupinfo.txt
-grep 'sudo' /etc/group >> /home/$USER/groupinfo.txt
-software-properties-gtk &> /dev/null & return &> /dev/null
+if [ "$EUID" -ne 0 ]; then 
+  echo -e "$WHITE The Current User is: $USER $ENDLN"
+  echo -e "$WHITE Installing applications... $ENDLN"
+  clear
+  apt-get update
+  apt-get -y install gufw auditd clamav libpam-cracklib gnome-tweaks
+  clear
+  rm /home/$USER/groupinfo.txt &> /dev/null
+  rm /home/$USER/mediafiles.txt &> /dev/null
+  software-properties-gtk &> /dev/null & return &> /dev/null
+else
+  rm /home/$USER/groupinfo.txt &> /dev/null
+  rm /home/$USER/mediafiles.txt &> /dev/null
+  touch /home/$USER/groupinfo.txt &> /dev/null
+  touch /home/$USER/mediafiles.txt &> /dev/null
+  grep 'users' /etc/group >> /home/$USER/groupinfo.txt
+  grep 'sudo' /etc/group >> /home/$USER/groupinfo.txt
+  software-properties-gtk &> /dev/null & return &> /dev/null
+fi
 
 view_passwd() {
   clear
@@ -223,38 +235,38 @@ upgrade () {
 
 security() {
   clear
-  sudo sh -c 'printf "[Seat:*]\nallow-guest=false\n" >/etc/lightdm/lightdm.conf.d/50-no-guest.conf'
+   sh -c 'printf "[Seat:*]\nallow-guest=false\n" >/etc/lightdm/lightdm.conf.d/50-no-guest.conf'
   echo ""
-  sudo cp -f login.defs /etc/login.defs
+   cp -f login.defs /etc/login.defs
   echo ""
-  sudo auditctl –e 1
+   auditctl –e 1
   echo ""
-  sudo clamscan / -r
+   clamscan / -r
   echo ""
-  sudo cp -f common-auth /etc/pam.d/common-auth
-  sudo cp -f common-account /etc/pam.d/common-account
-  sudo cp -f users.conf /etc/lightdm/users.conf
+   cp -f common-auth /etc/pam.d/common-auth
+   cp -f common-account /etc/pam.d/common-account
+   cp -f users.conf /etc/lightdm/users.conf
   echo -e "$GREEN Completed Successfully! $ENDLN"
 }
 
 tweaksrun() {
   clear
-  sudo gnome-tweaks &> /dev/null & return &> /dev/null
+   gnome-tweaks &> /dev/null & return &> /dev/null
 }
 
 findmedia() {
   clear
   echo "$WHITE Finding media files... $ENDLN"
-  sudo find /home -type f -iname "*.mp3" > /home/$USER/mediafiles.txt
-  sudo find /home -type f -iname "*.avi" >> /home/$USER/mediafiles.txt
-  sudo find /home -type f -iname "*.mov" >> /home/$USER/mediafiles.txt
-  sudo find /home -type f -iname "*.jpg" >> /home/$USER/mediafiles.txt
-  sudo find /home -type f -iname "*.png" >> /home/$USER/mediafiles.txt
-  sudo find /home -type f -iname "*.jpeg" >> /home/$USER/mediafiles.txt
-  sudo find /home -type f -iname "*.wav" >> /home/$USER/mediafiles.txt
-  sudo find /home -type f -iname "*.flac" >> /home/$USER/mediafiles.txt
-  sudo find /home -type f -iname "*.flac" >> /home/$USER/mediafiles.txt
-  sudo find /home -type f -iname "*.flac" >> /home/$USER/mediafiles.txt
+   find /home -type f -iname "*.mp3" > /home/$USER/mediafiles.txt
+   find /home -type f -iname "*.avi" >> /home/$USER/mediafiles.txt
+   find /home -type f -iname "*.mov" >> /home/$USER/mediafiles.txt
+   find /home -type f -iname "*.jpg" >> /home/$USER/mediafiles.txt
+   find /home -type f -iname "*.png" >> /home/$USER/mediafiles.txt
+   find /home -type f -iname "*.jpeg" >> /home/$USER/mediafiles.txt
+   find /home -type f -iname "*.wav" >> /home/$USER/mediafiles.txt
+   find /home -type f -iname "*.flac" >> /home/$USER/mediafiles.txt
+   find /home -type f -iname "*.flac" >> /home/$USER/mediafiles.txt
+   find /home -type f -iname "*.flac" >> /home/$USER/mediafiles.txt
   echo ""
   echo -e "$GREEN Completed Successfully! $ENDLN"
 }
@@ -282,22 +294,29 @@ echo -e "$RED*** DO THE FORENSICS QUESTIONS BEFORE MESSING WITH THE SYSTEM ***$E
 echo -e "$RED*****************************************************************$ENDLN"
 echo ""
 echo -e "$YELLOW The current working directory is: $PWD $ENDLN"
+echo ""
+if [ "$EUID" -ne 0 ]; then 
+  echo -e "$YELLOW The Current User is: $USER $ENDLN"
+else
+  echo -e "$RED The Current User is Root $ENDLN"
+
+fi
 echo -e "$WHITE
-1) View passwd file
-2) View group file
-3) View a users groups
-4) View strings in a given database (getent)
-5) View information about a given file
-6) Add or remove a user
-7) Add or remove a group
-8) Add or remove a user from a group
-9) Change a users password
-10) Update repositories and upgrade packages, also scan for viruses
-11) Update security settings
-12) Run gnome-tweaks (used for startup applications)
-13) Display system information
-14) Scan for media files
-0) Exit $ENDLN
+ 1) View passwd file
+ 2) View group file
+ 3) View a users groups
+ 4) View strings in a given database (getent)
+ 5) View information about a given file
+ 6) Add or remove a user (Requires Root)
+ 7) Add or remove a group (Requires Root)
+ 8) Add or remove a user from a group (Requires Root)
+ 9) Change a users password (Requires Root)
+ 10) Update repositories and upgrade packages, also scan for viruses (Requires Root)
+ 11) Update security settings (Requires Root)
+ 12) Run gnome-tweaks (used for startup applications) (Requires Root)
+ 13) Display system information (Requires Root)
+ 14) Scan for media files (Requires Root)
+ 0) Exit $ENDLN
 
 $CYAN////////////////////////////////////////////////////////////////////////////////////////$ENDLN
 
